@@ -5,23 +5,22 @@ module.exports = {
   async index(req, res) {
     const { latitude, longitude, techs } = req.query;
 
-    const techsArray = parseStringAsArray(techs);
-
+    const techsArray = parseStringAsArray(techs);    
     const devs = await Dev.find({
       techs: {
-        $in: techsArray
+        $in: techsArray,
       },
       location: {
         $near: {
           $geometry: {
             type: "Point",
-            coordinates: [longitude, latitude]
+            coordinates: [latitude, longitude],
           },
-          $maxDistance: 10000
-        }
-      }
+          $maxDistance: 12000,
+        },
+      },
     });
 
-    return res.json({ devs });
+    return res.json(devs);
   }
 };
