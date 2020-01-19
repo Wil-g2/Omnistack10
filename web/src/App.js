@@ -39,7 +39,7 @@ function App() {
           ))}
         </ul>
       </main>
-    </div>
+    </div> 
   );
 }
 
