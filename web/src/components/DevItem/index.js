@@ -5,10 +5,10 @@ import api from "../../services/api";
 
 function DevItem({ dev }) {
   async function remove(id) {
-    alert("teste remove id: " + id);
     const response = await api.delete(`/devs/${id}`);
-    console.log(response);
+    alert(response);    
   }
+
   return (
     <li className="dev-item">
       <header>
@@ -16,7 +16,7 @@ function DevItem({ dev }) {
           <img src={dev.avatar_url} alt={dev.name} />
           <div className="user-info">
             <strong>{dev.name}</strong>
-            <span>{dev.techs.join(", ")}</span>
+            <span>{dev.techs.join(', ')}</span>
           </div>
         </div>
         <button type="submit" onClick={() => remove(dev._id)}>
