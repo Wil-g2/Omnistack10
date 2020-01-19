@@ -1,5 +1,6 @@
 const axios = require("axios");
 const Dev = require("../models/Dev");
+const { findConnecitons, sendMessage } = require('../websocket');
 
 module.exports = {
   async index(req, res) {
@@ -15,7 +16,8 @@ module.exports = {
 
     if (dev) {
       return res.json({ error: "User already created in database" });
-    }
+    };
+
     const response = await axios.get(
       `https://api.github.com/users/${github_username}`
     );
@@ -37,6 +39,14 @@ module.exports = {
       techs: techsArray,
       location
     });
+
+    //connection filter distance and techs for socket.io
+    const sendSocketMessageTo = findConnecitons(      
+      { latitude, longitude } , 
+      techsArray
+    );
+    console.log(sendSocketMessageTo);
+    sendMessage(sendSocketMessageTo, 'newDev', dev);
 
     return res.json(dev);
   },
@@ -62,8 +72,8 @@ module.exports = {
   },
 
   async destroy(req, res) {
-    const { github_username } = req.query;
-    const dev = await Dev.deleteOne({ github_username });
+    const { id } = req.params;
+    const dev = await Dev.deleteOne({ _id: id });
     if (dev) {
       console.log("user was deleted with success");
     }
